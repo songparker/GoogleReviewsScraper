@@ -1,0 +1,213 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>{% block title %}Google Reviews Scraper{% endblock %}</title>
+    <style>
+        @font-face {
+            font-family: "Roboto", "Lucida Grande", "DejaVu Sans", "Bitstream Vera Sans", Verdana, Arial, sans-serif;
+            src: url("/static/res/ParalucentStencil-Medium.ttf");
+        }
+
+        @font-face {
+            font-family: "Roboto", "Lucida Grande", "DejaVu Sans", "Bitstream Vera Sans", Verdana, Arial, sans-serif;
+            src: url("/static/res/Paralucent-ExtraLight.ttf");
+        }
+
+        .formcenter table {
+            margin: 15px auto;
+        }
+
+        body {
+            background-color: #CCC;
+            margin-bottom: 0;
+            padding: 0;
+            font-family: "Roboto", "Lucida Grande", "DejaVu Sans", "Bitstream Vera Sans", Verdana, Arial, sans-serif;
+        }
+
+        #header {
+            display: block;
+            background-color: #CCC;
+            text-align: center;
+            width: 100%;
+        }
+
+        #main {
+            display: block;
+            overflow-y: scroll;
+            background-color: #FFF;
+            background-attachment: fixed;
+            min-height: 100px;
+            background-image: url("/static/img/TileTex.png");
+            color: #650011;
+            text-align: center;
+            width: 100%
+        }
+
+        .button {
+            background-color: #FFF;
+            color: #650011;
+            border: 2px solid #00005A;
+            padding: 5px;
+            margin: 5px;
+            border-radius: 10px;
+            font-family: "Roboto", "Lucida Grande", "DejaVu Sans", "Bitstream Vera Sans", Verdana, Arial, sans-serif;
+        }
+
+        .button a {
+            color: #650011;
+            text-decoration: none
+        }
+
+        .button a:hover {
+            color: #00005A
+        }
+
+        button {
+            font: inherit
+        }
+
+        button:hover {
+            color: #00005A
+        }
+
+        #header table {
+            margin: 10px;
+            display: inline-table
+        }
+
+        select {
+            margin: 5px 0;
+            width: 25ch;
+        }
+
+        input {
+            margin: 5px 0 5px 0;
+        }
+
+        input, select {
+            padding: 5px;
+            color: #00005A;
+            font: inherit;
+        }
+
+        h1 {
+            font-family: ParaStencil,serif;
+            color: #650011;
+            font-weight: normal
+        }
+
+        h2 {
+            color: #00005A;
+            text-align: center;
+        }
+
+        p {
+            color: #00005A;
+            padding: 5px;
+            text-align: center;
+        }
+
+        .result td{
+            border: 1px solid black;
+            padding: 5px;
+        }
+
+        .result table {
+            margin-left: auto;
+            margin-right: auto;
+            margin-bottom: 20px;
+        }
+
+        form {
+            margin-top: 10px;
+        }
+
+        th {
+            padding: 5px;
+        }
+
+    </style>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            var $header = $('#header');
+            var $footer = $('#footer');
+            var $main = $('#main');
+            var $window = $(window).on('resize', function () {
+                var height = $(this).height() - ($header.height() + $footer.height() + 3);
+                $main.height(height);
+            }).trigger('resize'); //on page load
+        });
+
+        function toggleAllReviews(checked) {
+        var checkboxes = document.getElementsByName('review_ids');
+        for (var i = 0; i < checkboxes.length; i++) {
+            checkboxes[i].checked = checked;
+        }
+    }
+    </script>
+</head>
+
+<body>
+<div id="header">
+    <div style="padding: 0; margin: 0">
+        <h1><b>Google Reviews Scraper</b></h1>
+        <div align="right" style="margin-right: 20px">
+            {% if current_user.is_authenticated %}
+            Hi, {{ current_user.id }}
+            {% endif %}
+        </div>
+    </div>
+    <table style="width: 100%; margin:0; padding: 0">
+        <tr>
+
+            <td align="left" style="width: 33%">
+                <table>
+                    <tr>
+                        <td><span class="button"><a href="/"><b>Home</b></a></span></td>
+                        <td><span class="button"><a href="/all_reviews"><b>All Reviews</b></a></span></td>
+                    </tr>
+                </table>
+            </td>
+
+            <td align="right" style="width: 33%">
+                <table>
+                    <tr>
+                        <td>
+                <span class="button">
+
+                        {% if current_user.is_authenticated %}
+                            <a href="/account"><b>Account</b></a>
+                        {% else %}
+                            <a href="/register"><b>Register</b></a>
+                        {% endif %}
+
+                </span>
+                        </td>
+                        <td>
+                <span class="button">
+
+                        {% if current_user.is_authenticated %}
+                            <a href="/logout"><b>Logout</b></a>
+                        {% else %}
+                            <a href="/login"><b>LogIn</b></a>
+                        {% endif %}
+
+                </span>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </table>
+</div>
+
+<div id="main"> {% block content %}
+    {% endblock %}
+</div>
+
+<div id="footer">
+</div>
+</body>
+</html>

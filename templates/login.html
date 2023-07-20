@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+{% extends "template.html" %}
+{% block title %}{{ super() }} - Login
+{% endblock %}
+{% block content %}
+    {% for message in get_flashed_messages() %}
+        {{ message }}<br/>
+    {% endfor %}
+
+    <div class="formcenter">
+        <form action="/login" method="post">
+            <table>
+                <th>
+                    <h1>Log in</h1>
+                </th>
+                {{ form.csrf_token }}
+
+                <tr>
+                    <td>{{ form.username.label }}</td>
+                    <td>{{ form.username }}</td>
+                </tr>
+                <tr>
+                    <td>{{ form.password.label }}</td>
+                    <td>{{ form.password }}</td>
+                </tr>
+
+                <th>
+                <td>{{ form.submit }}</td>
+                </th>
+            </table>
+        </form>
+    </div>
+{% endblock %}

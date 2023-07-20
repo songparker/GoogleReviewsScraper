@@ -1,0 +1,100 @@
+{% extends "template.html" %}
+{% block title %}{{ super() }} - All Reviews{% endblock %}
+{% block content %}
+
+<style>
+    .review-width-class {
+        min-width: 400px;
+    }
+
+    .time-width-class {
+        min-width: 95px;
+    }
+
+    .place-width-class {
+        min-width: 120px;
+    }
+
+    .reviewer-width-class {
+        max-width: 95px;
+    }
+
+    .response-width-class {
+        min-width: 200px; max-width: 300px;
+    }
+
+    .center-container {
+        width: 95%;
+        max-width: 1600px;
+        margin: auto;
+    }
+</style>
+
+{% for message in get_flashed_messages() %}
+<br/>{{ message }}<br/>
+{% endfor %}
+
+<!-- Dropdown for sorting options -->
+<form action="{{ url_for('sort_reviews') }}" method="GET">
+    <label for="sort_option">Sort By:</label>
+    <select name="option" id="sort_option">
+        <option value="id">ID</option>
+        <option value="place_name">Place Name</option>
+        <option value="reviewer">Reviewer</option>
+        <option value="rating">Rating</option>
+        <option value="review_time">Review Time</option>
+        <option value="review_content">Review Content</option>
+        <option value="owner_response">Owner Response</option>
+    </select>
+    <label for="sort_order">Order:</label>
+    <select name="order" id="sort_order">
+        <option value="asc">Ascending</option>
+        <option value="desc">Descending</option>
+    </select>
+    <button type="submit">Sort</button>
+</form>
+
+<form action="{{ url_for('delete_reviews') }}" method="POST">
+
+    <!-- Review Table -->
+    {% if reviews %}
+
+    <h2>All Reviews:</h2>
+    <button type="submit">Delete Selected Reviews</button></br></br>
+    <div class="result center-container">
+        <table>
+            <thead>
+            <tr>
+                <th><input type="checkbox" id="check_all" onclick="toggleAllReviews(this.checked)"></th>
+                <th>ID</th>
+                <th>Place Name</th>
+                <th>Reviewer</th>
+                <th>Rating</th>
+                <th>Review Time</th>
+                <th>Review Content</th>
+                <th>Owner Response</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for review in reviews %}
+            <tr>
+                <td width="30px"><input type="checkbox" name="review_ids" value="{{ review.id }}"></td>
+                <td>{{ review.id }}</td>
+                <td class="place-width-class">{{ review.place_name }}</td>
+                <td class="reviewer-width-class">{{ review.reviewer }}</td>
+                <td>{{ review.rating }}</td>
+                <td class="time-width-class">{{ review.review_time }}</td>
+                <td class="review-width-class">{{ review.review_content }}</td>
+                <td class="response-width-class">{{ review.owner_response }}</td>
+            </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    {% else %}
+    <p>No reviews found.</p>
+    {% endif %}
+</form>
+
+{% endblock %}

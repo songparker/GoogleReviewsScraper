@@ -1,0 +1,108 @@
+{% extends "template.html" %}
+{% block title %}{{ super() }} - Home{% endblock %}
+{% block content %}
+
+<style>
+    .review-width-class {
+        min-width: 400px;
+    }
+
+    .time-width-class {
+        min-width: 95px;
+    }
+
+    .reviewer-width-class {
+        min-width: 95px;
+    }
+
+    .response-width-class {
+        min-width: 200px; max-width: 400px;
+    }
+
+    .center-container {
+        width: 95%;
+        max-width: 1600px;
+        margin: auto;
+    }
+</style>
+
+{% for message in get_flashed_messages() %}
+<br/><strong>{{ message }}</strong><br/>
+{% endfor %}
+
+<!-- User Input Section -->
+<form method="POST">
+    <label for="place_name">Place Name:</label>
+    <input type="text" name="place_name" id="place_name" placeholder="Enter a place name"><br>
+    <label for="number_reviews">Number of Reviews:</label>
+    <input style="width: 100px" type="text" name="number_reviews" id="number_reviews" placeholder="" min="1" value="1000"><br><br>
+    <button type="submit">Scrape Reviews</button>
+    <p style="color: red;">Note: Please double-check the place URL to confirm it's the right place you want to check.</p>
+</form>
+
+<!-- Place and General Information Section -->
+{% if place_name or overall_rating %}
+<h2>Place and General Information</h2>
+<div class="result  center-container">
+    <table>
+        <thead>
+        <tr>
+            <th>Place Name</th>
+            <th>Place ID</th>
+            <th>Place URL</th>
+            <th>Overall Rating</th>
+            <th>Total Reviews</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td>{{ place_name }}</td>
+            <td>{{ place_id }}</td>
+            <td>{{ place_url }}</td>
+            <td>{{ overall_rating }}</td>
+            <td>{{ total_reviews }}</td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+{% endif %}
+
+<!-- Reviews Section -->
+{% if reviews %}
+<h2>Reviews:</h2>
+
+<div class="result center-container">
+    <table>
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Reviewer</th>
+            <th>Rating</th>
+            <th>Review Time</th>
+            <th>Review Content</th>
+            <th>Owner Response</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for review in reviews %}
+        <tr>
+            <td>{{ review.id }}</td>
+            <td class="reviewer-width-class">{{ review.reviewer }}</td>
+            <td>{{ review.rating }}</td>
+            <td class="time-width-class">{{ review.review_time }}</td>
+            <!-- <td width="500px">{{ review.review_content }}</td> -->
+            <td class="review-width-class">{{ review.review_content }}</td>
+            <td class="response-width-class">{{ review.owner_response }}</td>
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+
+
+{% elif no_reviews %}
+<p>We found no reviews for this place, please check your input and try again.</p>
+{% endif %}
+
+{% endblock %}

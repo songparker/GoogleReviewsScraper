@@ -1,0 +1,47 @@
+{% extends "template.html" %}
+{% block title %}{{ super() }} - {{ current_user.id }}{% endblock %}
+
+{% block content %}
+{% for message in get_flashed_messages() %}
+        {{ message }}<br/>
+    {% endfor %}
+<h1>Edit account information</h1>
+<div class="formcenter">
+    <form action="/account" method="post">
+        <table>
+
+            {{ form.csrf_token }}
+            <tr>
+                <td>{{ form.username.label }}</td>
+                <td>{{ form.username }}</td>
+            </tr>
+            <tr>
+                <td>{{ form.email.label }}</td>
+                <td>{{ form.email }}</td>
+            </tr>
+            <tr>
+                <td>{{ form.phone.label }}</td>
+                <td>{{ form.phone }}</td>
+            </tr>
+            <tr>
+                <td>{{ form.oldPassword.label }}</td>
+                <td>{{ form.oldPassword }}</td>
+            </tr>
+            <tr>
+                <td>{{ form.newPassword.label }}</td>
+                <td>{{ form.newPassword }}</td>
+            </tr>
+            <th>
+                {% if current_user.email %}
+            <td>{{ form.submit(value="Save") }}</td>
+            {% else %}
+            <td>{{ form.submit }}</td>
+            {% endif %}
+
+            </th>
+
+        </table>
+    </form>
+</div>
+
+{% endblock %}
